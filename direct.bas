@@ -1,0 +1,36 @@
+10 DEF SEG = &HB800
+20 DEFINT A-Y
+30 SCREEN 0, 0, 0
+40 RANDOMIZE TIMER
+50 CLS
+60 DIM A(25, 80), D(25, 80), E(25, 80), HAMMING(30)
+70 REM 219 IS ASCII FOR WHITE PIXEL
+80 REM 255 IS ASCII FOR BLACK PIXEL
+90 FOR I% = 0 TO 24
+    100 FOR J% = 0 TO 79
+        110 Z = RND(1)
+        120 IF Z < .1 THEN POKE I% * 160 + J% * 2, 219 ELSE POKE I% * 160 + J% * 2, 255
+    130 NEXT J%
+140 NEXT I%
+150 WHILE CYCLE < 1000
+    160 CYCLE = CYCLE + 1
+    170 FOR I% = 0 TO 24
+        180 FOR J% = 0 TO 79
+            190 B = PEEK(I% * 160 + J% * 2)
+            200 IF B = 219 THEN A(I%, J%) = 219 ELSE A(I%, J%) = 0
+            210 D(I%, J%) = A(I%, J%)
+        220 NEXT J%
+    230 NEXT I%
+    240 'INSERT CODE HERE FOR CELLULAR AUTOMATA RULES
+    250 FOR I% = 1 TO 23
+        260 FOR J% = 1 TO 78
+            270 IF A(I% - 1, J%) = 219 OR A(I% + 1, J%) = 219 THEN 280 ELSE GOTO 290
+            280 POKE I% * 160 + J% * 2, 219
+            285 GOTO 350
+            290 POKE I% * 160 + J% * 2, 255
+350 NEXT J%
+360 NEXT I%
+380 WEND
+390 END
+
+
